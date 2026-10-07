@@ -30,3 +30,16 @@ jobs:
           context: .
           push: true
           tags: ghcr.io/ibrahimzengintechlife/iz-docker-app:latest
+       deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH ile sunucuya deploy
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: sudo /opt/deploy/iz-docker-app-deploy.sh
